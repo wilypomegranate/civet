@@ -31,11 +31,21 @@ Window {
                 onPositionChanged: {
                     var deltaX = playArea.mouseX - oldMouseX
                     var deltaY = playArea.mouseY - oldMouseY
-                    // If the delta is too big drop it, because it's likely not right.
-                    if (Math.abs(deltaX) < 100 && Math.abs(deltaY) < 100) {
-                        console.log(deltaX, deltaY);
-                        _mouseClient.sendMovement(deltaX, deltaY);
+                    // If the delta is too big, just send 127.
+                    if (deltaX > 127) {
+                        deltaX = 127
                     }
+                    if (deltaX < -127) {
+                        deltaX = -127
+                    }
+                    if (deltaY > 127) {
+                        deltaY = 127
+                    }
+                    if (deltaY < -127) {
+                        deltaY = -127
+                    }
+                    console.log(deltaX, deltaY);
+                    _mouseClient.sendMovement(deltaX, deltaY);
                     oldMouseX = playArea.mouseX
                     oldMouseY = playArea.mouseY
                 }
