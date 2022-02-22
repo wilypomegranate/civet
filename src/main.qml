@@ -21,9 +21,20 @@ Window {
             anchors.fill: parent
             source: mediaplayer
 
+        Keys.onPressed: {
+            console.log("Pressed", event.key, event.modifiers)
+            event.accepted = true
+        }
+        Keys.onReleased: {
+            console.log("Released", event.key, event.modifiers)
+            event.accepted = true
+        }
+        focus: true
+
             MouseArea {
                 property var oldMouseX: playArea.mouseX
                 property var oldMouseY: playArea.mouseY
+                property var leftClick: false
                 id: playArea
                 anchors.fill: parent
                 hoverEnabled: true
@@ -45,9 +56,22 @@ Window {
                         deltaY = -127
                     }
                     console.log(deltaX, deltaY);
-                    _mouseClient.sendMovement(deltaX, deltaY);
+                    _mouseClient.sendMovement(deltaX, deltaY, leftClick);
                     oldMouseX = playArea.mouseX
                     oldMouseY = playArea.mouseY
+                }
+                onPressed: function (event) {
+                    console.log(event.button)
+                    if (event.button == Qt.LeftButton) {
+                        leftClick = true;
+                        _mouseClient.sendMovement(0, 0, leftClick)
+                    }
+                }
+                onReleased: function (event) {
+                    if (event.button == Qt.LeftButton) {
+                        leftClick = false;
+                        _mouseClient.sendMovement(0, 0, leftClick)
+                    }
                 }
             }
         }
