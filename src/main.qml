@@ -22,10 +22,12 @@ Window {
             source: mediaplayer
 
         Keys.onPressed: {
+            _keyboardClient.pressKey(event.key, event.modifiers)
             console.log("Pressed", event.key, event.modifiers)
             event.accepted = true
         }
         Keys.onReleased: {
+            _keyboardClient.releaseKey(event.key, event.modifiers)
             console.log("Released", event.key, event.modifiers)
             event.accepted = true
         }
@@ -42,6 +44,12 @@ Window {
                 onPositionChanged: {
                     var deltaX = playArea.mouseX - oldMouseX
                     var deltaY = playArea.mouseY - oldMouseY
+                    /* if (deltaX < 10) { */
+                    /*     deltaX = parseInt(deltaX * 1.5) */
+                    /* } */
+                    /* if (deltaY < 10) { */
+                    /*     deltaY = parseInt(deltaY * 1.5) */
+                    /* } */
                     // If the delta is too big, just send 127.
                     if (deltaX > 127) {
                         deltaX = 127

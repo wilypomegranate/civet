@@ -1,7 +1,5 @@
 #include "MouseClient.hpp"
 #include <QHostAddress>
-#include <QObject>
-#include <QUdpSocket>
 
 MouseClient::MouseClient(QObject *parent)
     : QObject(parent), seqnum_(1), socket_(new QUdpSocket()) {}

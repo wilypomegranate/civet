@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 
+#include "KeyboardClient.hpp"
 #include "MouseClient.hpp"
 
 int main(int argc, char *argv[]) {
@@ -9,6 +10,7 @@ int main(int argc, char *argv[]) {
   QCoreApplication::setApplicationName("civet");
 
   MouseClient *mouseClient = new MouseClient();
+  KeyboardClient *keyboardClient = new KeyboardClient();
 
   QGuiApplication app(argc, argv);
 
@@ -19,6 +21,7 @@ int main(int argc, char *argv[]) {
   QQmlContext *context = engine.rootContext();
 
   context->setContextProperty("_mouseClient", mouseClient);
+  context->setContextProperty("_keyboardClient", keyboardClient);
 
   engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 

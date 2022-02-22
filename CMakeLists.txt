@@ -13,12 +13,13 @@ if(CMAKE_VERSION VERSION_LESS "3.7.0")
   set(CMAKE_INCLUDE_CURRENT_DIR ON)
 endif()
 
-find_package(Qt5 COMPONENTS Qml Quick Gui Multimedia REQUIRED)
+find_package(Qt5 COMPONENTS Qml Quick Gui Multimedia Network REQUIRED)
 
 set(
   SOURCES
   src/cpp/main.cpp
   src/cpp/MouseClient.cpp
+  src/cpp/KeyboardClient.cpp
 )
 
 add_executable(
@@ -27,4 +28,4 @@ add_executable(
   src/qml.qrc
  )
 
-target_link_libraries(civet Qt5::Qml Qt5::Quick Qt5::Multimedia)
+target_link_libraries(civet Qt5::Qml Qt5::Quick Qt5::Multimedia Qt5::Network)
