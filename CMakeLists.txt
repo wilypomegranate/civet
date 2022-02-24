@@ -20,6 +20,7 @@ set(
   src/cpp/main.cpp
   src/cpp/MouseClient.cpp
   src/cpp/KeyboardClient.cpp
+  src/cpp/CursorMove.cpp
 )
 
 add_executable(

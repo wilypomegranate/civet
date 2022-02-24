@@ -18,6 +18,7 @@ Window {
         }
 
         VideoOutput {
+            id: "video"
             anchors.fill: parent
             source: mediaplayer
 
@@ -31,57 +32,74 @@ Window {
             console.log("Released", event.key, event.modifiers)
             event.accepted = true
         }
-        focus: true
-
-            MouseArea {
-                property var oldMouseX: playArea.mouseX
-                property var oldMouseY: playArea.mouseY
-                property var leftClick: false
-                id: playArea
-                anchors.fill: parent
-                hoverEnabled: true
-                cursorShape: Qt.BlankCursor
-                onPositionChanged: {
-                    var deltaX = playArea.mouseX - oldMouseX
-                    var deltaY = playArea.mouseY - oldMouseY
-                    /* if (deltaX < 10) { */
-                    /*     deltaX = parseInt(deltaX * 1.5) */
-                    /* } */
-                    /* if (deltaY < 10) { */
-                    /*     deltaY = parseInt(deltaY * 1.5) */
-                    /* } */
-                    // If the delta is too big, just send 127.
-                    if (deltaX > 127) {
-                        deltaX = 127
-                    }
-                    if (deltaX < -127) {
-                        deltaX = -127
-                    }
-                    if (deltaY > 127) {
-                        deltaY = 127
-                    }
-                    if (deltaY < -127) {
-                        deltaY = -127
-                    }
-                    console.log(deltaX, deltaY);
+        focus: playArea.containsMouse
+        MouseArea {
+            property var oldMouseX: playArea.mouseX
+            property var oldMouseY: playArea.mouseY
+            property var leftClick: false
+            property var allowChange: true
+            id: playArea
+            anchors.fill: parent
+            hoverEnabled: true
+            cursorShape: Qt.BlankCursor
+            onPositionChanged: {
+                var deltaX = playArea.mouseX - oldMouseX
+                var deltaY = playArea.mouseY - oldMouseY
+                /* if (deltaX < 10) { */
+                /*     deltaX = parseInt(deltaX * 1.5) */
+                /* } */
+                /* if (deltaY < 10) { */
+                /*     deltaY = parseInt(deltaY * 1.5) */
+                /* } */
+                // If the delta is too big, just send 127.
+                if (deltaX > 127) {
+                    deltaX = 127
+                }
+                if (deltaX < -127) {
+                    deltaX = -127
+                }
+                if (deltaY > 127) {
+                    deltaY = 127
+                }
+                if (deltaY < -127) {
+                    deltaY = -127
+                }
+                /* console.log(deltaX, deltaY); */
+                if (allowChange) {
                     _mouseClient.sendMovement(deltaX, deltaY, leftClick);
-                    oldMouseX = playArea.mouseX
-                    oldMouseY = playArea.mouseY
                 }
-                onPressed: function (event) {
-                    console.log(event.button)
-                    if (event.button == Qt.LeftButton) {
-                        leftClick = true;
-                        _mouseClient.sendMovement(0, 0, leftClick)
-                    }
+                else {
+                    allowChange = true
                 }
-                onReleased: function (event) {
-                    if (event.button == Qt.LeftButton) {
-                        leftClick = false;
-                        _mouseClient.sendMovement(0, 0, leftClick)
-                    }
+                // Force the cursor to stay at the center of the screen.
+                if (mouseX < 20 || mouseY < 20 || mouseX > video.width - 20 || mouseY > video.height - 20) {
+                    var position = mapFromItem(video, window.x, window.y);
+                    position.x += video.width / 2
+                    position.y += video.height / 2
+                    playArea.enabled = false
+                    playArea.hoverEnabled = false
+                    allowChange = false
+                    _cursorMove.moveCursor(position);
+                    playArea.enabled = true
+                    playArea.hoverEnabled = true
+                }
+                oldMouseX = playArea.mouseX
+                oldMouseY = playArea.mouseY
+            }
+            onPressed: function (event) {
+                console.log(event.button)
+                if (event.button == Qt.LeftButton) {
+                    leftClick = true;
+                    _mouseClient.sendMovement(0, 0, leftClick)
                 }
             }
+            onReleased: function (event) {
+                if (event.button == Qt.LeftButton) {
+                    leftClick = false;
+                    _mouseClient.sendMovement(0, 0, leftClick)
+                }
+            }
+        }
         }
 
     }

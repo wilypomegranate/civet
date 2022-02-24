@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 
+#include "CursorMove.hpp"
 #include "KeyboardClient.hpp"
 #include "MouseClient.hpp"
 
@@ -11,6 +12,7 @@ int main(int argc, char *argv[]) {
 
   MouseClient *mouseClient = new MouseClient();
   KeyboardClient *keyboardClient = new KeyboardClient();
+  CursorMove *cursorMove = new CursorMove();
 
   QGuiApplication app(argc, argv);
 
@@ -22,6 +24,7 @@ int main(int argc, char *argv[]) {
 
   context->setContextProperty("_mouseClient", mouseClient);
   context->setContextProperty("_keyboardClient", keyboardClient);
+  context->setContextProperty("_cursorMove", cursorMove);
 
   engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
