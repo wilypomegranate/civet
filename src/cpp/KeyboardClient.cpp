@@ -34,7 +34,22 @@ void KeyboardClient::pressKey(int key, int modifiers) {
   case Qt::Key_PageDown:
     data.key1 = 0x4e;
     break;
+  case Qt::Key_Left:
+    data.key1 = 0x50;
+    break;
+  case Qt::Key_Down:
+    data.key1 = 0x51;
+    break;
+  case Qt::Key_Up:
+    data.key1 = 0x52;
+    break;
+  case Qt::Key_Right:
+    data.key1 = 0x4f;
+    break;
   case Qt::Key_0:
+    data.key1 = 0x27;
+    break;
+  case Qt::Key_ParenRight:
     data.key1 = 0x27;
     break;
   case Qt::Key_1:
@@ -43,16 +58,25 @@ void KeyboardClient::pressKey(int key, int modifiers) {
   case Qt::Key_2:
     data.key1 = 0x1f;
     break;
+  case Qt::Key_At:
+    data.key1 = 0x1f;
+    break;
   case Qt::Key_3:
     data.key1 = 0x20;
     break;
   case Qt::Key_4:
     data.key1 = 0x21;
     break;
+  case Qt::Key_Dollar:
+    data.key1 = 0x21;
+    break;
   case Qt::Key_5:
     data.key1 = 0x22;
     break;
   case Qt::Key_6:
+    data.key1 = 0x23;
+    break;
+  case Qt::Key_AsciiCircum:
     data.key1 = 0x23;
     break;
   case Qt::Key_7:
@@ -64,19 +88,28 @@ void KeyboardClient::pressKey(int key, int modifiers) {
   case Qt::Key_9:
     data.key1 = 0x26;
     break;
+  case Qt::Key_ParenLeft:
+    data.key1 = 0x26;
+    break;
   case Qt::Key_Semicolon:
+    data.key1 = 0x33;
+    break;
+  case Qt::Key_Colon:
     data.key1 = 0x33;
     break;
   case Qt::Key_Less:
     data.key1 = 0xc5;
     break;
   case Qt::Key_Equal:
-    data.key1 = 0x23;
+    data.key1 = 0x2e;
     break;
   case Qt::Key_Comma:
     data.key1 = 0x36;
     break;
   case Qt::Key_Minus:
+    data.key1 = 0x2d;
+    break;
+  case Qt::Key_Underscore:
     data.key1 = 0x2d;
     break;
   case Qt::Key_Period:
@@ -85,16 +118,31 @@ void KeyboardClient::pressKey(int key, int modifiers) {
   case Qt::Key_Slash:
     data.key1 = 0x38;
     break;
+  case Qt::Key_Question:
+    data.key1 = 0x38;
+    break;
   case Qt::Key_BracketLeft:
+    data.key1 = 0x2f;
+    break;
+  case Qt::Key_BraceLeft:
     data.key1 = 0x2f;
     break;
   case Qt::Key_BracketRight:
     data.key1 = 0x30;
     break;
-  case Qt::Key_QuoteLeft:
+  case Qt::Key_BraceRight:
+    data.key1 = 0x30;
+    break;
+  case Qt::Key_Apostrophe:
+    data.key1 = 0x34;
+    break;
+  case Qt::Key_QuoteDbl:
     data.key1 = 0x34;
     break;
   case Qt::Key_Backslash:
+    data.key1 = 0x31;
+    break;
+  case Qt::Key_Bar:
     data.key1 = 0x31;
     break;
   case Qt::Key_A:
