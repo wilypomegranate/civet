@@ -46,6 +46,9 @@ void KeyboardClient::pressKey(int key, int modifiers) {
   case Qt::Key_Right:
     data.key1 = 0x4f;
     break;
+  case Qt::Key_Delete:
+    data.key1 = 0x4c;
+    break;
   case Qt::Key_0:
     data.key1 = 0x27;
     break;
@@ -55,6 +58,9 @@ void KeyboardClient::pressKey(int key, int modifiers) {
   case Qt::Key_1:
     data.key1 = 0x1e;
     break;
+  case Qt::Key_Exclam:
+    data.key1 = 0x1e;
+    break;
   case Qt::Key_2:
     data.key1 = 0x1f;
     break;
@@ -62,6 +68,9 @@ void KeyboardClient::pressKey(int key, int modifiers) {
     data.key1 = 0x1f;
     break;
   case Qt::Key_3:
+    data.key1 = 0x20;
+    break;
+  case Qt::Key_NumberSign:
     data.key1 = 0x20;
     break;
   case Qt::Key_4:
@@ -82,7 +91,13 @@ void KeyboardClient::pressKey(int key, int modifiers) {
   case Qt::Key_7:
     data.key1 = 0x24;
     break;
+  case Qt::Key_Ampersand:
+    data.key1 = 0x24;
+    break;
   case Qt::Key_8:
+    data.key1 = 0x25;
+    break;
+  case Qt::Key_Asterisk:
     data.key1 = 0x25;
     break;
   case Qt::Key_9:
@@ -97,13 +112,16 @@ void KeyboardClient::pressKey(int key, int modifiers) {
   case Qt::Key_Colon:
     data.key1 = 0x33;
     break;
-  case Qt::Key_Less:
-    data.key1 = 0xc5;
-    break;
   case Qt::Key_Equal:
     data.key1 = 0x2e;
     break;
+  case Qt::Key_Plus:
+    data.key1 = 0x2e;
+    break;
   case Qt::Key_Comma:
+    data.key1 = 0x36;
+    break;
+  case Qt::Key_Less:
     data.key1 = 0x36;
     break;
   case Qt::Key_Minus:
@@ -113,6 +131,9 @@ void KeyboardClient::pressKey(int key, int modifiers) {
     data.key1 = 0x2d;
     break;
   case Qt::Key_Period:
+    data.key1 = 0x37;
+    break;
+  case Qt::Key_Greater:
     data.key1 = 0x37;
     break;
   case Qt::Key_Slash:
@@ -144,6 +165,9 @@ void KeyboardClient::pressKey(int key, int modifiers) {
     break;
   case Qt::Key_Bar:
     data.key1 = 0x31;
+    break;
+  case Qt::Key_AsciiTilde:
+    data.key1 = 0x35;
     break;
   case Qt::Key_A:
     data.key1 = 0x04;
@@ -223,6 +247,42 @@ void KeyboardClient::pressKey(int key, int modifiers) {
   case Qt::Key_Z:
     data.key1 = 0x1d;
     break;
+  case Qt::Key_F1:
+    data.key1 = 0x3a;
+    break;
+  case Qt::Key_F2:
+    data.key1 = 0x3b;
+    break;
+  case Qt::Key_F3:
+    data.key1 = 0x3c;
+    break;
+  case Qt::Key_F4:
+    data.key1 = 0x3d;
+    break;
+  case Qt::Key_F5:
+    data.key1 = 0x3e;
+    break;
+  case Qt::Key_F6:
+    data.key1 = 0x3f;
+    break;
+  case Qt::Key_F7:
+    data.key1 = 0x40;
+    break;
+  case Qt::Key_F8:
+    data.key1 = 0x41;
+    break;
+  case Qt::Key_F9:
+    data.key1 = 0x42;
+    break;
+  case Qt::Key_F10:
+    data.key1 = 0x43;
+    break;
+  case Qt::Key_F11:
+    data.key1 = 0x44;
+    break;
+  case Qt::Key_F12:
+    data.key1 = 0x45;
+    break;
   default:
     // If no key defined just return and do nothing for now.
     break;
@@ -239,6 +299,9 @@ void KeyboardClient::pressKey(int key, int modifiers) {
   if (modifiers & Qt::AltModifier) {
     data.modifier |= 1 << 2;
   }
+  if (modifiers & Qt::MetaModifier) {
+    data.modifier |= 1 << 3;
+  }
 
   qDebug() << "Sending " << data.key1;
   int res = socket_->write((char *)(&data), sizeof(data));
@@ -251,15 +314,18 @@ void KeyboardClient::releaseKey(int key, int modifiers) {
 
   // Handle modifiers.
   // Only send left events since Qt is differentiating.
-  if (modifiers & Qt::ControlModifier) {
-    data.modifier |= 1 << 0;
-  }
-  if (modifiers & Qt::ShiftModifier) {
-    data.modifier |= 1 << 1;
-  }
-  if (modifiers & Qt::AltModifier) {
-    data.modifier |= 1 << 2;
-  }
+  // if (modifiers & Qt::ControlModifier) {
+  //   data.modifier |= 1 << 0;
+  // }
+  // if (modifiers & Qt::ShiftModifier) {
+  //   data.modifier |= 1 << 1;
+  // }
+  // if (modifiers & Qt::AltModifier) {
+  //   data.modifier |= 1 << 2;
+  // }
+  // if (modifiers & Qt::MetaModifier) {
+  //   data.modifier |= 1 << 3;
+  // }
 
   qDebug() << "Releasing " << data.key1;
   int res = socket_->write((char *)(&data), sizeof(data));
