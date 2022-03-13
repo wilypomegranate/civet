@@ -10,13 +10,13 @@ Window {
     Rectangle {
         color: "black"
         anchors.fill: parent
+        Settings {
+            id: settings
+            property string url: "url"
+        }
         MediaPlayer {
             id: mediaplayer
-            source: "gst-pipeline: udpsrc retrieve-sender-address=false port=5000 caps = \"application/x-rtp, media=video, clock-rate=90000, encoding-name=H264, packetization-mode=1, payload=96, seqnum-offset=19489, timestamp-offset=3505589453, ssrc=1918278934, a-framerate=30\" ! rtph264depay ! decodebin ! autovideosink"
-            /* source: "gst-pipeline: udpsrc retrieve-sender-address=false port=5000 caps = \"application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)RAW, sampling=(string)BGR, depth=(string)8, width=(string)1920, height=(string)1080, colorimetry=(string)SMPTE240M, payload=(int)96, a-framerate=(string)30\" ! rtpvrawdepay ! videoconvert  ! autovideosink" */
-            /* source: "gst-pipeline: udpsrc retrieve-sender-address=false port=5000 caps = \"application/x-rtp, media=\(string)video, clock-rate=\(int)90000, encoding-name=\(string)JPEG, a-framerate=\(string)30.000000, payload=\(int)26, ssrc=\(uint)2185079451, timestamp-offset=\(uint)546191858, seqnum-offset=\(uint)17382\" ! rtpjpegdepay ! decodebin ! autovideosink" */
-            /* caps = \"application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)RAW, sampling=(string)BGR, depth=(string)8, width=(string)1920, height=(string)1080, colorimetry=(string)SMPTE240M, payload=(int)96, a-framerate=(string)30\" ! rtpvrawdepay ! videoconvert  ! autovideosink" */
-            /* source: "gst-pipeline: videotestsrc ! autovideosink" */
+            source: settings.url
             autoPlay: true
         }
 
