@@ -1,8 +1,12 @@
 import QtQuick 2.15
 import QtQuick.Window 2.2
 import QtMultimedia 5.15
+import Qt.labs.settings 1.0
+
+import civet.wheeldirection 1.0
 
 Window {
+    id: "window"
     width: 1920
     height: 1080
     visible: true
@@ -33,6 +37,14 @@ Window {
         Keys.onReleased: {
             _keyboardClient.releaseKey(event.key, event.modifiers)
             console.log("Released", event.key, event.modifiers)
+            // Handle windows modifier differently when pressed alone.
+            // TODO This is most definitely a hack and needs a revisit.
+            if (event.modifiers & Qt.MetaModifier && event.key == Qt.Key_Super_L) {
+                _keyboardClient.pressKey(event.key, event.modifiers)
+                console.log("Pressed", event.key, event.modifiers)
+                _keyboardClient.releaseKey(event.key, event.modifiers)
+                console.log("Released", event.key, event.modifiers)
+            }
             event.accepted = true
         }
         focus: playArea.containsMouse
@@ -40,11 +52,14 @@ Window {
             property var oldMouseX: playArea.mouseX
             property var oldMouseY: playArea.mouseY
             property var leftClick: false
+            property var rightClick: false
+            property var middleClick: false
             property var allowChange: true
             id: playArea
             anchors.fill: parent
             hoverEnabled: true
             cursorShape: Qt.BlankCursor
+            acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
             onPositionChanged: {
                 var deltaX = playArea.mouseX - oldMouseX
                 var deltaY = playArea.mouseY - oldMouseY
@@ -69,7 +84,7 @@ Window {
                 }
                 /* console.log(deltaX, deltaY); */
                 if (allowChange) {
-                    _mouseClient.sendMovement(deltaX, deltaY, leftClick);
+                    _mouseClient.sendMovement(deltaX, deltaY, leftClick, rightClick, middleClick);
                 }
                 else {
                     allowChange = true
@@ -93,14 +108,36 @@ Window {
                 console.log(event.button)
                 if (event.button == Qt.LeftButton) {
                     leftClick = true;
-                    _mouseClient.sendMovement(0, 0, leftClick)
                 }
+                else if (event.button == Qt.RightButton) {
+                    rightClick = true;
+                }
+                else if (event.button == Qt.MiddleButton) {
+                    middleClick = true;
+                }
+                _mouseClient.sendMovement(0, 0, leftClick, rightClick, middleClick)
             }
             onReleased: function (event) {
                 if (event.button == Qt.LeftButton) {
                     leftClick = false;
-                    _mouseClient.sendMovement(0, 0, leftClick)
                 }
+                else if (event.button == Qt.RightButton) {
+                    rightClick = false;
+                }
+                else if (event.button == Qt.MiddleButton) {
+                    middleClick = false;
+                }
+                _mouseClient.sendMovement(0, 0, leftClick, rightClick)
+            }
+            onWheel: function(wheel) {
+                console.log(wheel.angleDelta.y)
+                if (wheel.angleDelta.y > 0) {
+                    _mouseClient.sendMovement(0, 0, leftClick, rightClick, middleClick, WheelDirection.WHEEL_UP);
+                }
+                else if (wheel.angleDelta.y < 0) {
+                    _mouseClient.sendMovement(0, 0, leftClick, rightClick, middleClick, WheelDirection.WHEEL_DOWN);
+                }
+                wheel.accepted = true;
             }
         }
         }

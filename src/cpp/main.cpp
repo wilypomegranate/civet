@@ -26,6 +26,10 @@ int main(int argc, char *argv[]) {
   context->setContextProperty("_keyboardClient", keyboardClient);
   context->setContextProperty("_cursorMove", cursorMove);
 
+  qmlRegisterUncreatableType<WheelDirectionClass>(
+      "civet.wheeldirection", 1, 0, "WheelDirection",
+      "Not creatable as it is an enum type.");
+
   engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
   if (engine.rootObjects().isEmpty())
