@@ -82,6 +82,9 @@ void KeyboardClient::pressKey(int key, int modifiers) {
   case Qt::Key_5:
     data.key1 = 0x22;
     break;
+  case Qt::Key_Percent:
+    data.key1 = 0x22;
+    break;
   case Qt::Key_6:
     data.key1 = 0x23;
     break;
