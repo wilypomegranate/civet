@@ -34,6 +34,6 @@ void MouseClient::sendMovement(int x, int y, bool leftClick, bool rightClick,
   qDebug() << "Wheel direction " << wheelDirection;
 
   socket_->writeDatagram((char *)&data, sizeof(data),
-                         QHostAddress("192.168.1.101"), 5001);
+                         QHostAddress("192.168.1.102"), 5001);
   seqnum_++;
 }
