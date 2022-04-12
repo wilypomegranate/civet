@@ -169,6 +169,9 @@ void KeyboardClient::pressKey(int key, int modifiers) {
   case Qt::Key_Bar:
     data.key1 = 0x31;
     break;
+  case Qt::Key_QuoteLeft:
+    data.key1 = 0x35;
+    break;
   case Qt::Key_AsciiTilde:
     data.key1 = 0x35;
     break;
