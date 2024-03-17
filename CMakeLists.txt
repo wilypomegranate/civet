@@ -14,6 +14,8 @@ if(CMAKE_VERSION VERSION_LESS "3.7.0")
 endif()
 
 find_package(Qt5 COMPONENTS Qml Quick Gui Multimedia Network REQUIRED)
+find_package(KF5Wayland CONFIG)
+# set_package_properties(KF5Wayland PROPERTIES TYPE REQUIRED)
 
 set(
   SOURCES
@@ -29,4 +31,4 @@ add_executable(
   src/qml.qrc
  )
 
-target_link_libraries(civet Qt5::Qml Qt5::Quick Qt5::Multimedia Qt5::Network)
+target_link_libraries(civet Qt5::Qml Qt5::Quick Qt5::Multimedia Qt5::Network Qt5::GuiPrivate KF5::WaylandClient)

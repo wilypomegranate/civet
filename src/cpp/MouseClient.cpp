@@ -1,8 +1,18 @@
 #include "MouseClient.hpp"
 #include <QHostAddress>
 
+#include <KWayland/Client/registry.h>
+
 MouseClient::MouseClient(QObject *parent)
-    : QObject(parent), seqnum_(1), socket_(new QUdpSocket()) {}
+    : QObject(parent), seqnum_(1), socket_(new QUdpSocket()) {
+
+  //     ct wl_display *display = static_cast<struct wl_display *>(
+  //     QGuiApplication::platformNativeInterface()->nativeResourceForIntegration(
+  //         "wl_display"));
+  // struct wl_registry *registry = wl_display_get_registry(display);
+  // wl_registry_bind(wl_registry, uint32_t name,
+  //                  const struct wl_interface *interface, uint32_t version)
+}
 
 void MouseClient::sendMovement(int x, int y, bool leftClick, bool rightClick,
                                bool middleClick, int wheelDirection) {
@@ -29,7 +39,7 @@ void MouseClient::sendMovement(int x, int y, bool leftClick, bool rightClick,
   if (wheelDirection == WheelDirectionClass::WHEEL_UP) {
     data.z = 0x01;
   } else if (wheelDirection == WheelDirectionClass::WHEEL_DOWN) {
-    data.z = 0xff;
+    data.z = (int8_t)0xff;
   }
   qDebug() << "Wheel direction " << wheelDirection;
 

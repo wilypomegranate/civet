@@ -2,4 +2,7 @@
 
 CursorMove::CursorMove(QObject *parent) : QObject(parent) {}
 
-void CursorMove::moveCursor(QPointF p) { QCursor::setPos(p.x(), p.y()); }
+void CursorMove::moveCursor(QPointF p) {
+  (void)(p);
+  // QCursor::setPos(p.x(), p.y());
+}

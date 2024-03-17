@@ -316,6 +316,8 @@ void KeyboardClient::pressKey(int key, int modifiers) {
 }
 
 void KeyboardClient::releaseKey(int key, int modifiers) {
+  (void)(key);
+  (void)(modifiers);
   KeyboardData data = {0, 0, 0, 0, 0, 0, 0, 0};
 
   // Handle modifiers.

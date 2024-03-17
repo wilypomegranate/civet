@@ -63,24 +63,24 @@ Window {
             onPositionChanged: {
                 var deltaX = playArea.mouseX - oldMouseX
                 var deltaY = playArea.mouseY - oldMouseY
-                /* if (deltaX < 10) { */
-                /*     deltaX = parseInt(deltaX * 1.5) */
-                /* } */
-                /* if (deltaY < 10) { */
-                /*     deltaY = parseInt(deltaY * 1.5) */
-                /* } */
+                if (deltaX < 10) {
+                    deltaX = parseInt(deltaX * 2)
+                }
+                if (deltaY < 10) {
+                    deltaY = parseInt(deltaY * 2)
+                }
                 // If the delta is too big, just send 127.
                 if (deltaX > 127) {
-                    deltaX = 127
+                    deltaX = 127*6
                 }
                 if (deltaX < -127) {
-                    deltaX = -127
+                    deltaX = -127*6
                 }
                 if (deltaY > 127) {
-                    deltaY = 127
+                    deltaY = 127*6
                 }
                 if (deltaY < -127) {
-                    deltaY = -127
+                    deltaY = -127*6
                 }
                 /* console.log(deltaX, deltaY); */
                 if (allowChange) {
