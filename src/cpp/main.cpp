@@ -2,11 +2,15 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 
+#include <KWayland/Client/connection_thread.h>
+#include <KWayland/Client/registry.h>
+
 #include "CursorMove.hpp"
 #include "KeyboardClient.hpp"
 #include "MouseClient.hpp"
 
 int main(int argc, char *argv[]) {
+  qputenv("QT_QPA_PLATFORM", QByteArrayLiteral("wayland"));
   QCoreApplication::setOrganizationName("wilypomegranate");
   QCoreApplication::setApplicationName("civet");
 
@@ -15,6 +19,23 @@ int main(int argc, char *argv[]) {
   CursorMove *cursorMove = new CursorMove();
 
   QGuiApplication app(argc, argv);
+
+  KWayland::Client::ConnectionThread *connection =
+      KWayland::Client::ConnectionThread::fromApplication();
+
+  KWayland::Client::Registry registry;
+  registry.create(connection);
+
+  QObject::connect(
+      &registry, &KWayland::Client::Registry::interfacesAnnounced, &app,
+      [&registry] {
+        const bool hasRelative =
+            registry.hasInterface(KWayland::Client::Registry::Interface::
+                                      RelativePointerManagerUnstableV1);
+        qDebug() << "has relative " << hasRelative;
+        exit(1);
+      },
+      Qt::QueuedConnection);
 
   QCoreApplication::addLibraryPath("./");
 

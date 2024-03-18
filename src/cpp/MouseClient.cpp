@@ -1,11 +1,8 @@
 #include "MouseClient.hpp"
 #include <QHostAddress>
 
-#include <KWayland/Client/registry.h>
-
 MouseClient::MouseClient(QObject *parent)
     : QObject(parent), seqnum_(1), socket_(new QUdpSocket()) {
-
   //     ct wl_display *display = static_cast<struct wl_display *>(
   //     QGuiApplication::platformNativeInterface()->nativeResourceForIntegration(
   //         "wl_display"));
