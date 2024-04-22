@@ -20,6 +20,7 @@ find_package(KF5Wayland CONFIG)
 set(
   SOURCES
   src/cpp/main.cpp
+  src/cpp/WayPointer.cpp
   src/cpp/MouseClient.cpp
   src/cpp/KeyboardClient.cpp
   src/cpp/CursorMove.cpp

@@ -2,6 +2,7 @@
 #define MOUSECLIENT_H_
 
 #include <QObject>
+#include <QSize>
 #include <QUdpSocket>
 
 #pragma pack(push, 1)
@@ -29,6 +30,7 @@ class MouseClient : public QObject {
 
 public:
   explicit MouseClient(QObject *parent = 0);
+  void sendRelativeMovement(const QSize &delta);
 
 public slots:
   void sendMovement(int x, int y, bool leftClick = false,
@@ -38,6 +40,7 @@ public slots:
 private:
   uint16_t seqnum_;
   QUdpSocket *socket_;
+  QSize delta_;
 };
 
 #endif // MOUSECLIENT_H_
