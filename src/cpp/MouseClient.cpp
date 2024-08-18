@@ -27,8 +27,8 @@ void MouseClient::sendRelativeMovement(const QSize &delta) {
 
 void MouseClient::sendMovement(int x, int y, bool leftClick, bool rightClick,
                                bool middleClick, int wheelDirection) {
-  qDebug() << "Sending x: " << x << "\ty: " << y << "\tleft: " << leftClick
-           << "\tright: " << rightClick << "\twheel: " << int(wheelDirection);
+  // qDebug() << "Sending x: " << x << "\ty: " << y << "\tleft: " << leftClick
+  //          << "\tright: " << rightClick << "\twheel: " << int(wheelDirection);
   // MouseData data{seqnum_, 0, static_cast<int8_t>(x), static_cast<int8_t>(y),
   // 0};
   MouseData data{seqnum_, 0, static_cast<int8_t>(delta_.width()),

@@ -57,17 +57,6 @@ int main(int argc, char *argv[]) {
         // KWayland::Client::Seat *seat =
         //     registry.createSeat(seatData.name, seatData.version);
 
-        const auto rpmData =
-            registry.interface(KWayland::Client::Registry::Interface::
-                                   RelativePointerManagerUnstableV1);
-        rpm = registry.createRelativePointerManager(rpmData.name,
-                                                    rpmData.version);
-        if (rpm) {
-          // rpm->createRelativePointer()
-        } else {
-          qDebug() << "Could not get relative pointer manager";
-          exit(1);
-        }
       },
       Qt::QueuedConnection);
 
@@ -79,12 +68,23 @@ int main(int argc, char *argv[]) {
 
         QObject::connect(
             seat, &Seat::hasPointerChanged, &app,
-            [&seat, &app, &rpm, &p, &rp, &mouseClient](bool has) {
+            [&registry, &seat, &app, &rpm, &p, &rp, &mouseClient](bool has) {
               if (!has) {
                 return;
               }
 
               p = seat->createPointer(&app);
+        const auto rpmData =
+            registry.interface(KWayland::Client::Registry::Interface::
+                                   RelativePointerManagerUnstableV1);
+        rpm = registry.createRelativePointerManager(rpmData.name,
+                                                    rpmData.version);
+        if (rpm) {
+          // rpm->createRelativePointer()
+        } else {
+          qDebug() << "Could not get relative pointer manager";
+          exit(1);
+        }
               rp = rpm->createRelativePointer(p);
               QObject::connect(
                   rp, &RelativePointer::relativeMotion, &app,
