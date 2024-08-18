@@ -9,9 +9,11 @@
 #include "MouseClient.hpp"
 #include <KWayland/Client/connection_thread.h>
 #include <KWayland/Client/pointer.h>
+#include <KWayland/Client/pointerconstraints.h>
 #include <KWayland/Client/registry.h>
 #include <KWayland/Client/relativepointer.h>
 #include <KWayland/Client/seat.h>
+#include <KWayland/Client/surface.h>
 
 using namespace KWayland::Client;
 
@@ -36,13 +38,15 @@ int main(int argc, char *argv[]) {
   KWayland::Client::Seat *seat = nullptr;
   KWayland::Client::RelativePointerManager *rpm = nullptr;
   KWayland::Client::Pointer *p = nullptr;
+  KWayland::Client::PointerConstraints *pc = nullptr;
   KWayland::Client::RelativePointer *rp = nullptr;
+  KWayland::Client::Surface *surface = nullptr;
 
-  MouseClient *mouseClient = new MouseClient(rp);
+  MouseClient *mouseClient = new MouseClient();
 
   QObject::connect(
       &registry, &KWayland::Client::Registry::interfacesAnnounced, &app,
-      [&registry, &rpm] {
+      [&registry, &rpm, &pc, &p, &surface, &mouseClient] {
         const bool hasRelative =
             registry.hasInterface(KWayland::Client::Registry::Interface::
                                       RelativePointerManagerUnstableV1);
@@ -51,6 +55,18 @@ int main(int argc, char *argv[]) {
                    << hasRelative;
           exit(1);
         }
+
+        const bool hasPointerConstraints = registry.hasInterface(KWayland::Client::Registry::Interface::PointerConstraintsUnstableV1);
+        if (!hasPointerConstraints) {
+          qDebug() << "Pointer constraints wayland interface missing"
+                   << hasPointerConstraints;
+          exit(1);
+        }
+
+        const auto pcData = registry.interface(KWayland::Client::Registry::Interface::
+                                PointerConstraintsUnstableV1);
+        pc = registry.createPointerConstraints(pcData.name, pcData.version);
+        mouseClient->setConstraints(surface, p, pc);
 
         // const auto seatData =
         // registry.interface(KWayland::Client::Registry::Interface::Seat);
@@ -125,6 +141,16 @@ int main(int argc, char *argv[]) {
 
   if (engine.rootObjects().isEmpty())
     return -1;
+
+  QObject* rootObject = engine.rootObjects().first();
+  if(rootObject) {
+    QWindow *window = qobject_cast<QWindow *>(rootObject);
+    if(window) {
+      surface = KWayland::Client::Surface::fromWindow(window);
+      // mouseClient->setConstraints(surface, p, pc);
+      // qDebug() << mouseClient;
+    }
+  }
 
   return app.exec();
 }

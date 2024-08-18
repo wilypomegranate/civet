@@ -61,6 +61,7 @@ Window {
             cursorShape: Qt.BlankCursor
             acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
             onPositionChanged: {
+                _mouseClient.lockArea()
                 var deltaX = playArea.mouseX - oldMouseX
                 var deltaY = playArea.mouseY - oldMouseY
                 if (deltaX < 10) {

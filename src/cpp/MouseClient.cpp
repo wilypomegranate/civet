@@ -1,9 +1,8 @@
 #include "MouseClient.hpp"
-#include <KWayland/Client/relativepointer.h>
 #include <QHostAddress>
 
 MouseClient::MouseClient(QObject *parent)
-    : QObject(parent), seqnum_(1), socket_(new QUdpSocket()), delta_(0, 0) {
+    : QObject(parent), seqnum_(1), socket_(new QUdpSocket()), delta_(0, 0), locked_(false), surface_(nullptr) {
   //     ct wl_display *display = static_cast<struct wl_display *>(
   //     QGuiApplication::platformNativeInterface()->nativeResourceForIntegration(
   //         "wl_display"));
@@ -60,4 +59,17 @@ void MouseClient::sendMovement(int x, int y, bool leftClick, bool rightClick,
   socket_->writeDatagram((char *)&data, sizeof(data),
                          QHostAddress("192.168.1.102"), 5001);
   seqnum_++;
+}
+
+void MouseClient::setConstraints(KWayland::Client::Surface *surface, KWayland::Client::Pointer* p, KWayland::Client::PointerConstraints* pc) {
+  surface_ = surface;
+  p_ = p;
+  pc_ = pc;
+}
+
+void MouseClient::lockArea() {
+  if (!locked_) {
+    pc_->lockPointer(surface_, p_, nullptr, KWayland::Client::PointerConstraints::LifeTime::Persistent);
+  locked_ = true;
+  }
 }
