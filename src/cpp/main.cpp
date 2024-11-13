@@ -19,7 +19,7 @@ using namespace KWayland::Client;
 
 int main(int argc, char *argv[]) {
   qputenv("QT_QPA_PLATFORM", QByteArrayLiteral("wayland"));
-  QCoreApplication::setOrganizationName("wilypomegranate");
+  QCoreApplication::setOrganizationName("civet");
   QCoreApplication::setApplicationName("civet");
 
   KeyboardClient *keyboardClient = new KeyboardClient();
