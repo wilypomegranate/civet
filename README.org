@@ -1,0 +1,20 @@
+* Civet
+A WIP IP based KVM client written in QT
+
+** Example Settings
+$XDG_CONFIG_DIR/civet/civet.conf
+
+#+BEGIN_SRC toml
+[General]
+url="gst-pipeline: udpsrc address=233.0.2.1 port=5000 caps = \"application/x-rtp, a-framerate=30\"  ! queue ! rtph264depay ! queue ! decodebin ! queue ! autovideosink sync=false"
+mouseServer="192.168.1.102"
+mousePort=5001
+keyboardServer="127.0.0.1"
+keyboardPort=5002
+#+END_SRC
+
+** Server settings
+#+BEGIN_SRC bash
+ssh -L 5002:192.168.1.102:5002 192.168.1.102
+gst-launch-1.0 -v v4l2src device=/dev/video0 ! "video/x-raw,framerate=25/1,format=NV12,width=1920,height=1080" ! queue ! x264enc tune=zerolatency bitrate=8192 speed-preset=superfast intra-refresh=true key-int-max=15  ! "video/x-h264,profile=high, level=(string)4.2" ! queue ! rtph264pay config-interval=1 ! queue ! udpsink host=233.0.2.1 port=5000
+#+END_SRC
