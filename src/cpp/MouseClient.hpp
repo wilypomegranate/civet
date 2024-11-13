@@ -35,6 +35,7 @@ public:
   explicit MouseClient(QObject *parent = 0);
   void sendRelativeMovement(const QSize &delta);
   void setConstraints(KWayland::Client::Surface *surface, KWayland::Client::Pointer* p, KWayland::Client::PointerConstraints* pc);
+  void setServer(QHostAddress server, quint16 port);
 
 public slots:
   void sendMovement(int x, int y, bool leftClick = false,
@@ -47,6 +48,8 @@ private:
   QUdpSocket *socket_;
   QSize delta_;
   bool locked_;
+  QHostAddress server_;
+  quint16 port_;
   KWayland::Client::Surface *surface_;
   KWayland::Client::Pointer *p_;
   KWayland::Client::PointerConstraints *pc_;

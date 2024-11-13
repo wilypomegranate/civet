@@ -1,6 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QSettings>
 
 #include <qnamespace.h>
 
@@ -22,9 +23,6 @@ int main(int argc, char *argv[]) {
   QCoreApplication::setOrganizationName("civet");
   QCoreApplication::setApplicationName("civet");
 
-  KeyboardClient *keyboardClient = new KeyboardClient();
-  CursorMove *cursorMove = new CursorMove();
-
   QGuiApplication app(argc, argv);
 
   // WayPointer wp;
@@ -42,7 +40,19 @@ int main(int argc, char *argv[]) {
   KWayland::Client::RelativePointer *rp = nullptr;
   KWayland::Client::Surface *surface = nullptr;
 
+  QSettings settings;
+
+  auto keyboardServer = QHostAddress(settings.value("keyboardServer").toString());
+  auto keyboardPort = settings.value("keyboardPort").toInt();
+
+  KeyboardClient *keyboardClient = new KeyboardClient();
+  keyboardClient->setServer(keyboardServer, keyboardPort);
+  CursorMove *cursorMove = new CursorMove();
+
+  auto mouseServer = QHostAddress(settings.value("mouseServer").toString());
+  auto mousePort = settings.value("mousePort").toInt();
   MouseClient *mouseClient = new MouseClient();
+  mouseClient->setServer(mouseServer, mousePort);
 
   QObject::connect(
       &registry, &KWayland::Client::Registry::interfacesAnnounced, &app,

@@ -1,11 +1,7 @@
 #include "KeyboardClient.hpp"
 
 KeyboardClient::KeyboardClient(QObject *parent)
-    : QObject(parent), socket_(new QTcpSocket) {
-  socket_->connectToHost("127.0.0.1", 5002);
-  if (!socket_->waitForConnected(1000)) {
-    qDebug() << "Error: " << socket_->errorString();
-  }
+    : QObject(parent), socket_(new QTcpSocket), server_(), port_(0) {
 }
 
 void KeyboardClient::pressKey(int key, int modifiers) {
@@ -339,4 +335,13 @@ void KeyboardClient::releaseKey(int key, int modifiers) {
   int res = socket_->write((char *)(&data), sizeof(data));
   socket_->flush();
   qDebug() << "Socket send returned " << res;
+}
+
+void KeyboardClient::setServer(QHostAddress server, quint16 port) {
+  server_ = server;
+  port_ = port;
+  socket_->connectToHost(server_, port_);
+  if (!socket_->waitForConnected(1000)) {
+    qDebug() << "Error: " << socket_->errorString();
+  }
 }

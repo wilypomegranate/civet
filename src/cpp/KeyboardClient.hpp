@@ -4,6 +4,7 @@
 #include <QKeyEvent>
 #include <QObject>
 #include <QTcpSocket>
+#include <QHostAddress>
 
 #pragma pack(push, 1)
 struct KeyboardData {
@@ -25,9 +26,12 @@ public:
   explicit KeyboardClient(QObject *parent = 0);
   Q_INVOKABLE void pressKey(int key, int modifiers);
   Q_INVOKABLE void releaseKey(int key, int modifiers);
+  void setServer(QHostAddress server, quint16 port);
 
 private:
   QTcpSocket *socket_;
+  QHostAddress server_;
+  quint16 port_;
 };
 
 #endif // KEYBOARDCLIENT_H_

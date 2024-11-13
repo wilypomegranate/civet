@@ -2,7 +2,7 @@
 #include <QHostAddress>
 
 MouseClient::MouseClient(QObject *parent)
-    : QObject(parent), seqnum_(1), socket_(new QUdpSocket()), delta_(0, 0), locked_(false), surface_(nullptr) {
+    : QObject(parent), seqnum_(1), socket_(new QUdpSocket()), delta_(0, 0), locked_(false), server_(), port_(0), surface_(nullptr) {
   //     ct wl_display *display = static_cast<struct wl_display *>(
   //     QGuiApplication::platformNativeInterface()->nativeResourceForIntegration(
   //         "wl_display"));
@@ -20,7 +20,7 @@ void MouseClient::sendRelativeMovement(const QSize &delta) {
                  static_cast<int8_t>(delta_.height()), 0};
 
   socket_->writeDatagram((char *)&data, sizeof(data),
-                         QHostAddress("192.168.1.102"), 5001);
+                         server_, port_);
   seqnum_++;
 }
 
@@ -57,7 +57,7 @@ void MouseClient::sendMovement(int x, int y, bool leftClick, bool rightClick,
   qDebug() << "Wheel direction " << wheelDirection;
 
   socket_->writeDatagram((char *)&data, sizeof(data),
-                         QHostAddress("192.168.1.102"), 5001);
+                         server_, port_);
   seqnum_++;
 }
 
@@ -65,6 +65,11 @@ void MouseClient::setConstraints(KWayland::Client::Surface *surface, KWayland::C
   surface_ = surface;
   p_ = p;
   pc_ = pc;
+}
+
+void MouseClient::setServer(QHostAddress server, quint16 port) {
+  server_ = server;
+  port_ = port;
 }
 
 void MouseClient::lockArea() {
